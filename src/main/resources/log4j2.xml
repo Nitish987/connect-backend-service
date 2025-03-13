@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration status="WARN" name="connect">
+    <Properties>
+        <Property name="log-path">logs</Property>
+        <Property name="logfile-name">connect</Property>
+        <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
+        <Property name="LOG_LEVEL_PATTERN">%5p</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{${LOG_LEVEL_PATTERN}} %clr{${sys:PID}}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}" />
+        </Console>
+
+        <RollingFile name="RollingFile" filePattern="${log-path}/${logfile-name}-%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN} ${sys:PID} --- [%15.15t] %c : %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <DirectWriteRolloverStrategy />
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="ERROR">
+            <AppenderRef ref="Console" />
+        </Root>
+
+        <Logger name="org.springframework" level="INFO" additivity="false">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="RollingFile" level="DEBUG" />
+        </Logger>
+
+        <Logger name="com.zaxxer.hikari" level="INFO" additivity="false">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="RollingFile" level="DEBUG" />
+        </Logger>
+
+        <Logger name="com.conceptune.connect" level="TRACE" additivity="false">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="RollingFile" level="TRACE" />
+        </Logger>
+    </Loggers>
+</Configuration>
